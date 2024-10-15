@@ -44,7 +44,7 @@
   <body>
 
     <!--The language attribute is case-insensitive but must refer to a language imported above.-->
-    <div style="float: left; width: 30%">
+    <div style="float: left; width: 40%; min-width: 400px">
     <code-input template="syntax-highlighted" language="Python" id="pycode" placeholder="Type your code here" >import random
 # Compute pi
 N_pi = 0
@@ -90,14 +90,14 @@ print(f"Our pi estimate is {4*N_pi/N_tot}")
   </div>
     <br>
     <br>
-    <div style="float: left;width: 30%">
+    <div style="float: left;width: 30%; min-width: 300px">
       Output:
       <br>
       <pre id="pyout">
         Output value here
       </pre>
     </div>
-    <div style="float: right;width: 30%">
+    <div style="float: left;width: 30%; min-width: 300px">
     Your code returns:
     <br>
     <pre id="pyret">
