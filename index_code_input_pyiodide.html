@@ -45,16 +45,19 @@
 
     <!--The language attribute is case-insensitive but must refer to a language imported above.-->
     <div style="float: left; width: 40%; min-width: 400px; min-height: 300px">
-    <code-input template="syntax-highlighted" language="Python" id="pycode" placeholder="Type your code here" >import random
+    <code-input template="syntax-highlighted" language="Python" id="pycode" placeholder="Type your code here" >import numpy as np
+import matplotlib.pyplot as plt
 # Compute pi
-N_pi = 0
 N_tot = 1000
-for i in range(N_tot):
-  u = random.random()
-  v = random.random()
-  if u**2+v**2 < 1:
-    N_pi += 1
-print(f"Our pi estimate is {4*N_pi/N_tot}")
+u = np.random.random(N_tot)
+v = np.random.random(N_tot)
+d = (u**2 + v**2) < 1
+
+# Output
+print(f"Our pi estimate is {4*sum(d)/N_tot}")
+fig, ax = plt.subplots()
+ax.scatter(u,v, c=d)
+plt.show()
 </code-input>
                                               <!-- onchange="console.log('Your code is', this.value)" -->
 
