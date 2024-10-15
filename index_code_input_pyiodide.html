@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>code-input with highlight.js</title>
+    
+    <!--Import highlight.js-->
+    <!--For a downloaded version of highlight.js, replace the file paths for both CSS and JS below with the relative file paths from this HTML file.-->
+    <!--This is similar to the "self hosted" example below.-->
+    <!--Guide: https://highlightjs.org/#usage#:~:text=As%20HTML%20Tags-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+    <!--You can also choose custom themes by changing "default" above to the theme name from https://highlightjs.org/demo-->
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    
+    <!--Import highlight.js languages-->
+    <!--You can copy this line to import additional languages, replacing "javascript" with a language name from https://highlightjs.org/demo.-->
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/javascript.min.js"></script>
+    
+    <!--Import code-input-->
+    <!--The same goes for downloaded versions.-->
+    <script src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@2.3/code-input.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@2.3/code-input.min.css">
+    
+    <!--Import some code-input plugins-->
+    <!--The same goes for downloaded versions.-->
+    <!--Plugin files are here: https://github.com/WebCoder49/code-input/tree/main/plugins.-->
+    <script src="https://cdn.jsdelivr.net/gh/WebCoder49/code-input@2.3/plugins/indent.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+    <!--Register code-input template-->
+    <script>
+      codeInput.registerTemplate("syntax-highlighted", 
+        codeInput.templates.hljs(
+          hljs, 
+          [
+            // You can add or remove plugins in this list from https://github.com/WebCoder49/code-input/blob/main/plugins/README.md.
+            // All plugins used must be imported above.
+            new codeInput.plugins.Indent(true, 2) // Allow Tab-key indentation, with 2 spaces indentation
+          ]
+        )
+      );
+      // Register templates with different names here, if needed.
+    </script>
+  </head>
+  <body>
+
+    <!--The language attribute is case-insensitive but must refer to a language imported above.-->
+    <code-input template="syntax-highlighted" language="Python" id="pycode" placeholder="Type your code here">import random
+# Compute pi
+N_pi = 0
+N_tot = 1000
+for i in range(N_tot):
+  u = random.random()
+  v = random.random()
+  if u**2+v**2 < 1:
+    N_pi += 1
+print(f"Our pi estimate is {4*N_pi/N_tot}")
+</code-input>
+                                              <!-- onchange="console.log('Your code is', this.value)" -->
+
+    <!--Additional usage details are here: https://github.com/WebCoder49/code-input/blob/main/README.md-->
+    <!--A list of plugins are here. We recommend the Autodetect plugin with highlight.js: https://github.com/WebCoder49/code-input/blob/main/plugins/README.md-->
+    <script type="text/javascript">
+      async function runPython(){
+        let code = document.getElementById("pycode");
+        let pyodide = await loadPyodide();
+        await pyodide.loadPackage("micropip");
+        const micropip = pyodide.pyimport("micropip");
+        await micropip.install('numpy');
+        await micropip.install('matplotlib');
+        let pyout = document.getElementById("pyout");
+        let pyret = document.getElementById("pyret");
+        pyout.innerHTML = '';
+        pyret.innerHTML = '';
+        pyodide.setStdout({ batched: (msg) => pyout.innerHTML += (msg+'\n') });
+        try {
+          let output = pyodide.runPython(code.value);
+          pyret.style.color = "black";
+          pyret.innerHTML = output; 
+        } catch (err) {
+          pyret.style.color = "red";
+          pyret.innerHTML = err; 
+        }
+      }
+    </script>
+
+    <button onclick="runPython()">
+      Run Code
+    </button>
+    <br>
+    <br>
+    <div style="float: left;width: 50%">
+      Output:
+      <br>
+      <pre id="pyout">
+        Output value here
+      </pre>
+    </div>
+    <div style="float: right;width: 50%">
+    Your code returns:
+    <br>
+    <pre id="pyret">
+      Return value here
+    </pre>
+    </div>
+ </body>
+</html>
