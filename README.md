@@ -5,6 +5,9 @@ Built using:
 - [code-input](https://github.com/WebCoder49/code-input/)
 
 # TODO
+- [ ] add some easy way to customise the default code
+  - maybe a link to a separate .py file?
+  - or read a URL param?
 - [ ] fix the matplotlib div render, put it somewhere
 - [ ] make run button nicer
 - [ ] add a reset button?
